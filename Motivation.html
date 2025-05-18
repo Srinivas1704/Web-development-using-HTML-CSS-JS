@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Motivation Hub</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #e3f2fd;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 2.5rem;
+      color: #1565c0;
+    }
+
+    .quote-box {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .quote {
+      font-size: 22px;
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    .date {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    input[type="date"], input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 90%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #1976d2;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0d47a1;
+    }
+
+    footer {
+      margin: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .section-title {
+      margin-top: 40px;
+      font-size: 20px;
+      color: #1565c0;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Daily Motivation Hub</h1>
+
+  <!-- Today's Quote -->
+  <div class="quote-box" id="todayQuoteBox">
+    <div class="quote" id="todayQuoteText">Loading...</div>
+    <div class="date" id="todayQuoteDate"></div>
+  </div>
+
+  <!-- Previous Quotes -->
+  <div class="section-title">🔍 View Previous Day's Quote</div>
+  <div class="quote-box">
+    <input type="date" id="datePicker" max="">
+    <button onclick="showQuoteForDate()">Show Quote</button>
+    <div class="quote" id="prevQuoteText"></div>
+    <div class="date" id="prevQuoteDate"></div>
+  </div>
+
+  <!-- Add New Quote -->
+  <div class="section-title">➕ Add a New Motivational Quote</div>
+  <form onsubmit="addQuote(event)">
+    <label for="newQuote">New Quote:</label>
+    <input type="text" id="newQuote" placeholder="Type your motivational quote here" required>
+
+    <button type="submit">Add Quote</button>
+  </form>
+
+  <footer>
+    Made with 💙 to inspire you daily
+  </footer>
+
+  <script>
+    const quotes = [
+      "Believe in yourself and all that you are.",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      "Every day is a new beginning. Take a deep breath and start again.",
+      "Push yourself, because no one else is going to do it for you.",
+      "Do something today that your future self will thank you for.",
+      "Great things never come from comfort zones.",
+      "It always seems impossible until it’s done.",
+      "You are stronger than you think.",
+      "Doubt kills more dreams than failure ever will.",
+      "Don’t watch the clock; do what it does. Keep going.",
+      "Start where you are. Use what you have. Do what you can.",
+      "Success doesn’t come to you, you go to it.",
+      "Stay positive. Work hard. Make it happen.",
+      "You don't have to be great to start, but you have to start to be great.",
+      "Don't limit your challenges. Challenge your limits.",
+      "Hustle in silence and let your success make the noise.",
+      "Your only limit is your.",
+    ];
+
+    function getQuoteIndex(dateStr) {
+      const date = new Date(dateStr);
+      const dayIndex = Math.floor(date.getTime() / (1000 * 60 * 60 * 24));
+      return dayIndex % quotes.length;
+    }
+
+    function showTodayQuote() {
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      const index = getQuoteIndex(todayStr);
+      const quote = quotes[index];
+
+      document.getElementById("todayQuoteText").innerText = `"${quote}"`;
+      document.getElementById("todayQuoteDate").innerText = `Today's Quote - ${today.toDateString()}`;
+    }
+
+    function showQuoteForDate() {
+      const dateInput = document.getElementById("datePicker").value;
+      if (!dateInput) return;
+
+      const index = getQuoteIndex(dateInput);
+      const quote = quotes[index];
+      const dateStr = new Date(dateInput).toDateString();
+
+      document.getElementById("prevQuoteText").innerText = `"${quote}"`;
+      document.getElementById("prevQuoteDate").innerText = `Quote for ${dateStr}`;
+    }
+
+    function addQuote(event) {
+      event.preventDefault();
+      const newText = document.getElementById("newQuote").value.trim();
+
+      if (newText) {
+        quotes.push(newText);
+        alert("Quote added successfully!");
+        document.getElementById("newQuote").value = "";
+        showTodayQuote(); // Refresh today's quote with the new list
+      }
+    }
+
+    document.getElementById("datePicker").max = new Date().toISOString().split('T')[0];
+    window.onload = showTodayQuote;
+  </script>
+
+</body>
+</html>
